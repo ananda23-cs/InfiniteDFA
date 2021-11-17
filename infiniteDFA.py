@@ -39,7 +39,7 @@ for transition in sampleData["trans_func"]:
     sampleDFA.add_edge(transition[0], transition[2], weight=transition[1])
 
 for accept_state in sampleData["final_states"]:
-    sources = sampleData['states'][0:len(sampleData['states'])]
+    sources = sampleData['states'][0:len(sampleData['states'])-1]
     for source in sources:
         if nx.has_path(sampleDFA,source,accept_state):
             if nx.find_cycle(sampleDFA,source,'original') is not None:
