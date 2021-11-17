@@ -23,9 +23,11 @@ import networkx as nx
 # dfa5 = nx.DiGraph()
 # dfa5.add_nodes_from(data5["states"])
 
+#parses json file
 sampleF = open("sampleDFA.json")
 sampleData = json.load(sampleF)
 
+#constructs DFA and performs edge cases for badly formatted DFA's
 if (sampleData["start_state"] not in sampleData["states"]):
     raise ValueError("Invalid DFA")
 
@@ -35,15 +37,25 @@ for final in sampleData["final_states"]:
 
 sampleDFA = nx.DiGraph()
 sampleDFA.add_nodes_from(sampleData["states"])
+
+#adds edges to directed graph
 for transition in sampleData["trans_func"]:
+    if transition[0] not in sampleDFA.nodes or transition[2] not in sampleDFA.nodes:
+        raise ValueError("Invalid DFA")
+    if transition[1] not in sampleData["alphabet"]:
+        raise ValueError("Invalid DFA")
+    
     sampleDFA.add_edge(transition[0], transition[2], weight=transition[1])
 
 for accept_state in sampleData["final_states"]:
+    #check to see if there is a final state is reachable
     sources = sampleData['states'][0:len(sampleData['states'])-1]
     for source in sources:
         if nx.has_path(sampleDFA,source,accept_state):
+            #if cycle exists along path, then DFA is infinite
             if nx.find_cycle(sampleDFA,source,'original') is not None:
-                print("DFA is Infinite")
+                print("Yes. DFA is Infinite")
                 exit(0)
-    
-print("DFA is not infinite")
+
+#if conditions don't meet, DFA is not infinite  
+print("No. DFA is not infinite")
