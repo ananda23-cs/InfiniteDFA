@@ -9,7 +9,7 @@ def test(filename):
             raise OSError("Empty JSON input file")
         data = json.load(f)
         if not data:
-            raise IOError("Empty JSON file.")
+            raise IOError("JSON has no data.")
 
     #constructs DFA and performs edge cases for badly formatted DFA's
     if (data["start_state"] not in data["states"]):
