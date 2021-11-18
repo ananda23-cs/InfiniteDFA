@@ -1,10 +1,15 @@
-import json
+import json, os
 import networkx as nx
 
 #parses json file
 def test(filename):
-    f = open(filename)
-    data = json.load(f)
+    #opens the JSON input file
+    with open(filename) as f:
+        if os.path.getsize(filename) == 0:
+            raise OSError("Empty JSON input file")
+        data = json.load(f)
+        if not data:
+            raise IOError("Empty JSON file.")
 
     #constructs DFA and performs edge cases for badly formatted DFA's
     if (data["start_state"] not in data["states"]):
@@ -32,8 +37,8 @@ def test(filename):
         for source in sources:
             if nx.has_path(dfa,source,accept_state):
                 #if cycle exists along path, then DFA is infinite
-                for c in list(nx.simple_cycles(dfa)):
-                    if accept_state in c:
+                for c in nx.simple_cycles(dfa):
+                    if len(c) > 1:
                         print("DFA is infinite.")
                         exit(0)
 
@@ -41,4 +46,4 @@ def test(filename):
     print("No. DFA is not infinite")
 
 if __name__ == '__main__':
-    test('sampleDFA.json')
+    test('test1.json')
