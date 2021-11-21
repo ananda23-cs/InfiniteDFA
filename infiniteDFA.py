@@ -22,7 +22,7 @@ def test(filename):
     dfa = nx.DiGraph()
     dfa.add_nodes_from(data["states"])
 
-    if len(data["trans_func"]) < (2 * len(dfa.nodes)):
+    if len(data["trans_func"]) < (len(data["alphabet"]) * len(dfa.nodes)):
         raise ValueError("Invalid DFA")
     
     #adds edges to directed graph
@@ -60,4 +60,5 @@ def test(filename):
     print("No. DFA is not infinite")
 
 if __name__ == '__main__':
-    test('sampleDFA.json')
+    #test('sampleDFA.json')
+    test('test1.json')
