@@ -8,29 +8,29 @@ def test(filename):
         if os.path.getsize(filename) == 0:
             raise OSError("Empty JSON input file")
         data = json.load(f)
-        if len(data) == 2:
-            raise IOError("JSON has no data.")
+        if len(data) == 0:
+            raise OSError("JSON has no data.")
 
     #constructs DFA and performs edge cases for badly formatted DFA's
     if data["start_state"] not in data["states"]:
-        raise ValueError("Invalid DFA")
+        raise ValueError("Invalid start state")
 
     for final in data["final_states"]:
         if final not in data["states"]:
-            raise ValueError("Invalid DFA")
+            raise ValueError("Invalid accept state")
 
     dfa = nx.DiGraph()
     dfa.add_nodes_from(data["states"])
 
     if len(data["trans_func"]) < (len(data["alphabet"]) * len(dfa.nodes)):
-        raise ValueError("Invalid DFA")
+        raise ValueError("Not enough transitions.")
     
     #adds edges to directed graph
     for transition in data["trans_func"]:
         if transition[0] not in dfa.nodes or transition[2] not in dfa.nodes:
-            raise ValueError("Invalid DFA")
+            raise ValueError("Invalid transition")
         if transition[1] not in data["alphabet"]:
-            raise ValueError("Invalid DFA")
+            raise ValueError("Invalid transition")
         
         dfa.add_edge(transition[0], transition[2], weight=transition[1])
 
@@ -46,8 +46,7 @@ def test(filename):
 
     for accept_state in data["final_states"]:
         #check to see if there is a final state is reachable
-        sources = data['states'][0:len(data['states'])]
-        for source in sources:
+        for source in dfa.nodes:
             if nx.has_path(dfa,source,accept_state):
                 #if cycle exists along path, then DFA is infinite
                 for path in nx.all_simple_edge_paths(dfa,source,accept_state):
@@ -57,8 +56,14 @@ def test(filename):
                             exit(0)
 
     #if conditions don't meet, DFA is not infinite  
-    print("No. DFA is not infinite")
+    print("No. DFA is not infinite.")
 
 if __name__ == '__main__':
     #test('sampleDFA.json')
-    test('test1.json')
+    #test('test1.json')
+    #test('test2.json')
+    #test('test3.json')
+    #test('test4.json')
+    #test('test5.json')
+    #test('test6.json')
+    test('test7.json')
