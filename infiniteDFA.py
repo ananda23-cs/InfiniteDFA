@@ -45,16 +45,20 @@ def test(filename):
             transitionSet.add(edge) 
 
     for accept_state in data["final_states"]:
+        if accept_state in cycleNodeSet:
+            print("DFA is infinite.")
+            exit(0)
         #check to see if there is a final state is reachable
         for source in dfa.nodes:
             if nx.has_path(dfa,source,accept_state):
-                #if cycle exists along path, then DFA is infinite
+                #if cycle exists along a simple path from source to accept_state, 
+                #then DFA is infinite
                 for path in nx.all_simple_edge_paths(dfa,source,accept_state):
                     for edge in path:
                         if edge in transitionSet:
                             print("DFA is infinite.")
                             exit(0)
-
+            
     #if conditions don't meet, DFA is not infinite  
     print("No. DFA is not infinite.")
 
@@ -65,5 +69,5 @@ if __name__ == '__main__':
     #test('test3.json')
     #test('test4.json')
     #test('test5.json')
-    #test('test6.json')
-    test('test7.json')
+    test('test6.json')
+    #test('test7.json')
