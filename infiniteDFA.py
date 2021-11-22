@@ -65,10 +65,10 @@ def test(filename):
 
 if __name__ == '__main__':
     #test('sampleDFA.json')
-    #test('test1.json')
+    test('test1.json')
     #test('test2.json')
     #test('test3.json')
     #test('test4.json')
     #test('test5.json')
-    test('test6.json')
+    #test('test6.json')
     #test('test7.json')
