@@ -44,12 +44,7 @@ def test(filename):
         for edge in dfa.out_edges(node):
             transitionSet.add(edge) 
 
-    for accept_state in data["final_states"]:
-        #checks if final state is part of a cycle
-        if accept_state in cycleNodeSet:
-            print("DFA is infinite.")
-            exit(0)
-            
+    for accept_state in data["final_states"]:           
         #check to see if a final state is reachable from all sources on a simple path
         for source in dfa.nodes:
             if nx.has_path(dfa,source,accept_state):
@@ -60,7 +55,11 @@ def test(filename):
                         if edge in transitionSet:
                             print("DFA is infinite.")
                             exit(0)
-            
+        #checks if final state is part of a cycle
+        if accept_state in cycleNodeSet:
+            print("DFA is infinite.")
+            exit(0)
+                
     #if conditions don't meet, DFA is not infinite  
     print("No. DFA is not infinite.")
 
